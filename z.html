@@ -6,7 +6,7 @@
 	<script>
 		alert('hihi');
 		
-		document.getElementById("content").innerHTML = "Hello3"
+		document.getElementById("content").innerHTML = "Hello4"
 		
 		window.addEventListener('devicemotion', (event) => {
 		  
@@ -14,7 +14,7 @@
 			  let y = event.acceleration.y;
 			  let z = event.acceleration.z;
 			  
-			  var acc =  𝙼𝚊𝚝𝚑.𝚜𝚚𝚛𝚝(x * x + y * y + z * z);
+			  var acc = x * x + y * y + z * z;
 
 			  var t = "";
 			  
@@ -25,7 +25,7 @@
 			  t += `${z} m/s2`;
 			  t += "<br>";
 			
-			  if (acc > 1.5) {
+			  if (acc > 2) {
 			    t += "<h1>BUMP</h1>";
 			  }
 			  document.getElementById("content").innerHTML = t;
