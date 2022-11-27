@@ -56,6 +56,7 @@
 		</script>
 	</div>
 
+	<audio id=scream1 src="idub3.mp3"></audio>
 	<audio id=scream1 src="lily1.mp3"></audio>
 	<audio id=scream2 src="lily2.mp3"></audio>
 	<audio id=scream3 src="lily3.mp3"></audio>
@@ -66,8 +67,13 @@
 		
 		document.getElementById("content").innerHTML = "Hello7";
 		
+		var scream_i = 0;
 		function scream() {
-		  document.getElementById('scream3').play();
+		  var audios = document.body.getElementsByTagName("audio");
+		  audios[scream_i].play();
+		  scream_i = (scream_i + 1) % audios.length;
+		  //console.log(audios);
+		  //console.log(scream_i);
 		}
 		
 		scream();
