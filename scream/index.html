@@ -79,21 +79,21 @@
 		}
 		</script>
 	</div>
-	<audio id=scream1 src="idub3.mp3" autoplay muted></audio>
-	<audio id=scream1 src="lily1.mp3" autoplay muted></audio>
-	<audio id=scream2 src="lily2.mp3" autoplay muted></audio>
-	<audio id=scream3 src="lily3.mp3" autoplay muted></audio>
-	<audio id=scream4 src="lily4.mp3" autoplay muted></audio>
-	<audio id=scream5 src="lily5.mp3" autoplay muted></audio>
+	<audio id=scream1 src="idub3.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream1 src="lily1.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream2 src="lily2.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream3 src="lily3.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream4 src="lily4.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream5 src="lily5.mp3" preload="auto" autoplay muted></audio>
 	<div id=content>Nothing1</div>
 	<div id=content2>
 		<center>
-		<img id="angryface" src="angry.png" style="object-fit:contain;width:90%;height:90%;" />
-		<img id="happyface" src="happy.png" style="object-fit:contain;width:90%;height:90%;" />
+		<img id="angryface" hidden src="angry.png" style="object-fit:contain;width:90%;height:90%;" />
+		<img id="happyface" hidden src="happy.png" style="object-fit:contain;width:90%;height:90%;" />
 		</center>
 	</div>
 	<script>
-	document.getElementById("content").innerHTML = "Hello7";
+	document.getElementById("content").innerHTML = "LOADING...";
 	var scream_i = 0;
 	var last_scream_time = 0;
 
@@ -111,13 +111,19 @@
 	function update_face() {
 		var audios = document.body.getElementsByTagName("audio");
 		var screaming = 0;
+		var all_loaded = 1;
 		for(var i = 0; i < audios.length; i++) {
 			var audio = audios[i];
-			if(!audio.paused && !audio.muted) screaming += 1;
+			if (!audio.paused && !audio.muted) screaming += 1;
+			if (audio.readyState < 2) {
+				all_loaded = 0;
+			}
 		}
-		document.getElementById("angryface").hidden = screaming <= 0;
-		document.getElementById("happyface").hidden = screaming > 0;
-		document.body.style.backgroundColor = screaming <= 0 ? "white" : "red";
+		if (all_loaded > 0) {
+			document.body.style.backgroundColor = screaming <= 0 ? "white" : "red";
+			document.getElementById("angryface").hidden = screaming <= 0;
+			document.getElementById("happyface").hidden = screaming > 0;
+		}
 	}
 	var x = setInterval(update_face, 100);
 	scream();
