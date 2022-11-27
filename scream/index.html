@@ -68,7 +68,13 @@
 		document.getElementById("content").innerHTML = "Hello7";
 		
 		var scream_i = 0;
+		var last_scream_time = new Date();
 		function scream() {
+		  var now = new Date();
+                  var distance_seconds = (now - last_scream_time) / 1000.0;
+	          if (distance_seconds < 1.0) return;
+		  last_scream_time = new Date();
+			
 		  var audios = document.body.getElementsByTagName("audio");
 		  audios[scream_i].play();
 		  scream_i = (scream_i + 1) % audios.length;
