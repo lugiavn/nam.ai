@@ -68,7 +68,7 @@
 		document.getElementById("content").innerHTML = "Hello7";
 		
 		var scream_i = 0;
-		var last_scream_time = new Date();
+		var last_scream_time = 0;
 		function scream() {
 		  var now = new Date();
                   var distance_seconds = (now - last_scream_time) / 1000.0;
@@ -103,8 +103,8 @@
 			
 		      var threshold = parseFloat(document.getElementById("demo").innerHTML);
 			  if (acc > threshold) {
+			   scream();
 			    t += "<h1>BUMP</h1>";
-				scream();
 			  }
 			  document.getElementById("content").innerHTML = t;
 		});
