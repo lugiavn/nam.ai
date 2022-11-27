@@ -56,12 +56,12 @@
 		</script>
 	</div>
 
+	<audio id=yourAudioTag src="https://nam.ai/z.wav"></audio>
 	<div id=content>Nothing2</div>
 	<script>
 		
-		document.getElementById("content").innerHTML = "Hello7"
-				var audio = new Audio('z.wav');
-				audio.play();
+		document.getElementById("content").innerHTML = "Hello7";
+		document.getElementById('yourAudioTag').play();
 		
 		window.addEventListener('devicemotion', (event) => {
 		  
@@ -83,9 +83,7 @@
 		      var threshold = parseFloat(document.getElementById("demo").innerHTML);
 			  if (acc > threshold) {
 			    t += "<h1>BUMP</h1>";
-				
-				var audio = new Audio('https://nam.ai/z.wav');
-				audio.play();
+				document.getElementById('yourAudioTag').play();
 			  }
 			  document.getElementById("content").innerHTML = t;
 		});
