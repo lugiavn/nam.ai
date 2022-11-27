@@ -41,7 +41,7 @@
 	}
 	</style>
 </head>
-	<body> <h1> Version 12 </h1>
+	<body> <h1> Version 13 </h1>
 	<div class="slidecontainer">
 	  <input type="range" min="1" max="100" value="90" class="slider" id="myRange">
 	  <p>Value: <span id="demo"></span></p>
@@ -86,18 +86,20 @@
 		  audios[scream_i].muted = false;
 		  audios[scream_i].play();
 		  scream_i = (scream_i + 1) % audios.length;
-		  //console.log(audios);
-		  //console.log(scream_i);
-		  
-		  document.getElementById("angryface").hidden = false;
-		  document.getElementById("happyface").hidden = true;
-		  setTimeout(
-			function() {
-			  document.getElementById("angryface").hidden = true;
-			  document.getElementById("happyface").hidden = false;
-			}, 4000);
 		}
-		
+
+		function update_face() {
+		  var audios = document.body.getElementsByTagName("audio");
+		  var screaming = 0;
+		  for (var i = 0; i < audios.length; i++) {
+		    var audio = audios[i];
+			if (!audio.paused && !audio.muted) screaming += 1;
+		  }
+		  document.getElementById("angryface").hidden = screaming <= 0;
+		  document.getElementById("happyface").hidden = screaming > 0;
+		}
+        var x = setInterval(update_face, 100);
+		  
 		scream();
 		
 		window.addEventListener('devicemotion', (event) => {
