@@ -41,7 +41,7 @@
 	}
 	</style>
 </head>
-	<body> <h1> Version 10 </h1>
+	<body> <h1> Version 11 </h1>
 	<div class="slidecontainer">
 	  <input type="range" min="1" max="100" value="90" class="slider" id="myRange">
 	  <p>Value: <span id="demo"></span></p>
@@ -62,7 +62,14 @@
 	<audio id=scream3 src="lily3.mp3"></audio>
 	<audio id=scream4 src="lily4.mp3"></audio>
 	<audio id=scream5 src="lily5.mp3"></audio>
-	<div id=content>Nothing2</div>
+	<div id=content>Nothing1</div>
+	<div id=content2>
+		<center>
+			<img id="angryface" hidden height="80%" src="https://www.kindpng.com/picc/m/96-966373_meme-rage-freetoedit-angry-meme-face-png-transparent.png"/>
+			<img id="happyface" height="80%" src="https://i.ebayimg.com/images/g/13EAAOSw6ntZkwWq/s-l500.jpg"/>
+		</center>
+	</div>
+	
 	<script>
 		
 		document.getElementById("content").innerHTML = "Hello7";
@@ -80,6 +87,14 @@
 		  scream_i = (scream_i + 1) % audios.length;
 		  //console.log(audios);
 		  //console.log(scream_i);
+		  
+		  document.getElementById("angryface").hidden = false;
+		  document.getElementById("happyface").hidden = true;
+		  setTimeout(
+			function() {
+			  document.getElementById("angryface").hidden = true;
+			  document.getElementById("happyface").hidden = false;
+			}, 4000);
 		}
 		
 		scream();
