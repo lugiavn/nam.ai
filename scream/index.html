@@ -109,6 +109,7 @@
 			  let z = event.acceleration.z;
 			  
 			  var acc = x * x + y * y + z * z;
+			  acc = Math.sqrt(parseFloat(acc));
 
 			  var t = "";
 			  
