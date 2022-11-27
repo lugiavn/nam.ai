@@ -11,13 +11,23 @@
 		window.addEventListener('devicemotion', (event) => {
 		  
 			  let x = event.acceleration.x; 
-			  //let y = event.acceleration.y;
+			  let y = event.acceleration.y;
+			  let z = x;
 			  //let z = event.acceleration.z;
 			  
 			  //acc =  𝙼𝚊𝚝𝚑.𝚜𝚚𝚛𝚝(x * x + y * y + z * z);
-			  t = x;
-			  if (x > 0.02) {
-			    t = "<h1>BUMP</h1>";
+
+			  var t = "";
+			  
+			  t += `${x} m/s2`;
+			  t += "<br>";
+			  t += `${y} m/s2`;
+			  t += "<br>";
+			  t += `${z} m/s2`;
+			  t += "<br>";
+			
+			  if (x > 0.1) {
+			    t += "<h1>BUMP</h1>";
 			  }
 			  document.getElementById("content").innerHTML = t;
 		});
