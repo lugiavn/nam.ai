@@ -6,7 +6,7 @@
 	<script>
 		alert('hihi');
 		
-		document.getElementById("content").innerHTML = "Hello"
+		document.getElementById("content").innerHTML = "Hello2"
 		
 		window.addEventListener('devicemotion', (event) => {
 		  
@@ -16,8 +16,9 @@
 			  
 			  //acc =  𝙼𝚊𝚝𝚑.𝚜𝚚𝚛𝚝(x * x + y * y + z * z);
 			  t = x;
-			  if (acc > 0.02)
+			  if (x > 0.02) {
 			    t = "<h1>BUMP</h1>";
+			  }
 			  document.getElementById("content").innerHTML = t;
 		});
 	</script>
