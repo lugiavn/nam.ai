@@ -11,12 +11,12 @@
 		window.addEventListener('devicemotion', (event) => {
 		  
 			  let x = event.acceleration.x; 
-			  let y = event.acceleration.y;
-			  let z = event.acceleration.z;
+			  //let y = event.acceleration.y;
+			  //let z = event.acceleration.z;
 			  
-			  acc =  𝙼𝚊𝚝𝚑.𝚜𝚚𝚛𝚝(x * x + y * y + z * z);
-			  t = "";
-			  if (acc > 0.5)
+			  //acc =  𝙼𝚊𝚝𝚑.𝚜𝚚𝚛𝚝(x * x + y * y + z * z);
+			  t = x;
+			  if (acc > 0.02)
 			    t = "<h1>BUMP</h1>";
 			  document.getElementById("content").innerHTML = t;
 		});
