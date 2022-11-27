@@ -84,8 +84,8 @@
 	<div id=content>Nothing1</div>
 	<div id=content2>
 		<center>
-		<img id="angryface" hidden height="80%" src="https://www.kindpng.com/picc/m/96-966373_meme-rage-freetoedit-angry-meme-face-png-transparent.png" />
-		<img id="happyface" height="80%" src="https://i.ebayimg.com/images/g/13EAAOSw6ntZkwWq/s-l500.jpg" />
+		<img id="angryface" hidden height="80%" src="angry.png" />
+		<img id="happyface" height="80%" src="happy.png" />
 		</center>
 	</div>
 	<script>
@@ -113,6 +113,7 @@
 		}
 		document.getElementById("angryface").hidden = screaming <= 0;
 		document.getElementById("happyface").hidden = screaming > 0;
+		document.body.style.backgroundColor = screaming <= 0 ? "white" : "red";
 	}
 	var x = setInterval(update_face, 100);
 	scream();
