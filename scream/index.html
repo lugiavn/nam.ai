@@ -83,7 +83,10 @@
 	<audio id=scream5 src="lily5.mp3" autoplay muted></audio>
 	<div id=content>Nothing1</div>
 	<div id=content2>
-		<center> <img id="angryface" hidden height="80%" src="https://www.kindpng.com/picc/m/96-966373_meme-rage-freetoedit-angry-meme-face-png-transparent.png" /> <img id="happyface" height="80%" src="https://i.ebayimg.com/images/g/13EAAOSw6ntZkwWq/s-l500.jpg" /> </center>
+		<center>
+		<img id="angryface" hidden height="80%" src="https://www.kindpng.com/picc/m/96-966373_meme-rage-freetoedit-angry-meme-face-png-transparent.png" />
+		<img id="happyface" height="80%" src="https://i.ebayimg.com/images/g/13EAAOSw6ntZkwWq/s-l500.jpg" />
+		</center>
 	</div>
 	<script>
 	document.getElementById("content").innerHTML = "Hello7";
@@ -129,7 +132,6 @@
 		var threshold = parseFloat(document.getElementById("demo").innerHTML) / 10.0;
 		if(acc > threshold) {
 			scream();
-			t += "<h1>BUMP</h1>";
 		}
 		document.getElementById("content").innerHTML = t;
 	});
