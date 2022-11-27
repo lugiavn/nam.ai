@@ -62,10 +62,10 @@
 </head>
 
 <body>
-	<h1> Version 15 </h1>
+	<h1> Bump and Scream - version 16 </h1>
 	<div class="slidecontainer">
 		<input type="range" min="1" max="500" value="100" class="slider" id="myRange">
-		<p>Value: <span id="demo"></span></p>
+		<p>Sensitivity Threshold: <span id="demo"></span></p>
 		<script>
 		var slider = document.getElementById("myRange");
 		var output = document.getElementById("demo");
@@ -123,11 +123,11 @@
 		let z = event.acceleration.z;
 		var acc = x * x + y * y + z * z;
 		acc = Math.sqrt(parseFloat(acc));
-		var t = "";
+		var t = "Acc: ";
 		t += `${x} m/s2`;
-		t += "<br>";
+		t += ", ";
 		t += `${y} m/s2`;
-		t += "<br>";
+		t += ", ";
 		t += `${z} m/s2`;
 		t += "<br>";
 		var threshold = parseFloat(document.getElementById("demo").innerHTML) / 10.0;
