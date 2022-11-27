@@ -56,12 +56,12 @@
 		</script>
 	</div>
 
-	<audio id=scream1 src="idub3.mp3"></audio>
-	<audio id=scream1 src="lily1.mp3"></audio>
-	<audio id=scream2 src="lily2.mp3"></audio>
-	<audio id=scream3 src="lily3.mp3"></audio>
-	<audio id=scream4 src="lily4.mp3"></audio>
-	<audio id=scream5 src="lily5.mp3"></audio>
+	<audio id=scream1 src="idub3.mp3" autoplay muted></audio>
+	<audio id=scream1 src="lily1.mp3" autoplay muted></audio>
+	<audio id=scream2 src="lily2.mp3" autoplay muted></audio>
+	<audio id=scream3 src="lily3.mp3" autoplay muted></audio>
+	<audio id=scream4 src="lily4.mp3" autoplay muted></audio>
+	<audio id=scream5 src="lily5.mp3" autoplay muted></audio>
 	<div id=content>Nothing1</div>
 	<div id=content2>
 		<center>
@@ -83,6 +83,7 @@
 		  last_scream_time = new Date();
 			
 		  var audios = document.body.getElementsByTagName("audio");
+		  audios[scream_i].muted = false;
 		  audios[scream_i].play();
 		  scream_i = (scream_i + 1) % audios.length;
 		  //console.log(audios);
