@@ -8,10 +8,10 @@
 		
 		document.getElementById("content").innerHTML = "Hello"
 		
-		window.addEventListener('deviceorientation', (event) => {
+		window.addEventListener('devicemotion', (event) => {
 		  
-			  let x = event.beta; 
-			  let y = event.gamma; 
+			  let x = event.acceleration.x; 
+			  let y = event.acceleration.y;
 
 			  t = `beta : ${x}\n`;
 			  t += `gamma: ${y}\n`;
