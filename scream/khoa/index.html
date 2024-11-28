@@ -1,1 +1,149 @@
-Hello world
+<html>
+
+<head>
+	<style>
+	.slidecontainer {
+		width: 100%;
+		/* Width of the outside container */
+	}
+	/* The slider itself */
+	
+	.slider {
+		-webkit-appearance: none;
+		/* Override default CSS styles */
+		appearance: none;
+		width: 80%;
+		/* Full-width */
+		height: 25px;
+		/* Specified height */
+		background: #d3d3d3;
+		/* Grey background */
+		outline: none;
+		/* Remove outline */
+		opacity: 0.7;
+		/* Set transparency (for mouse-over effects on hover) */
+		-webkit-transition: .2s;
+		/* 0.2 seconds transition on hover */
+		transition: opacity .2s;
+	}
+	/* Mouse-over effects */
+	
+	.slider:hover {
+		opacity: 1;
+		/* Fully shown on mouse-over */
+	}
+	/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+	
+	.slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		/* Override default look */
+		appearance: none;
+		width: 25px;
+		/* Set a specific slider handle width */
+		height: 25px;
+		/* Slider handle height */
+		background: #04AA6D;
+		/* Green background */
+		cursor: pointer;
+		/* Cursor on hover */
+	}
+	
+	.slider::-moz-range-thumb {
+		width: 25px;
+		/* Set a specific slider handle width */
+		height: 25px;
+		/* Slider handle height */
+		background: #04AA6D;
+		/* Green background */
+		cursor: pointer;
+		/* Cursor on hover */
+	}
+	html, body {
+		margin: 5;
+		padding: 5;
+	}
+	</style>
+</head>
+
+<body>
+	<h1> Chu Tich Khoa Simulator </h1>
+	<div class="slidecontainer">
+		<input type="range" min="1" max="500" value="100" class="slider" id="myRange">
+		<p>Sensitivity Threshold: <span id="demo"></span></p>
+		<script>
+		var slider = document.getElementById("myRange");
+		var output = document.getElementById("demo");
+		output.innerHTML = slider.value;
+		slider.oninput = function() {
+			output.innerHTML = this.value;
+		}
+		</script>
+	</div>
+	<audio id=scream1 src="khoa1.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream2 src="khoa2.mp3" preload="auto" autoplay muted></audio>
+	<audio id=scream3 src="khoa3.mp3" preload="auto" autoplay muted></audio>
+	<div id=content>Nothing1</div>
+	<div id=content2>
+		<center>
+		<img id="angryface" hidden src="angry.png" style="object-fit:contain;width:90%;height:90%;" />
+		<img id="happyface" hidden src="happy.png" style="object-fit:contain;width:90%;height:90%;" />
+		</center>
+	</div>
+	<script>
+	document.getElementById("content").innerHTML = "LOADING... Do you have motion sensor?";
+	var scream_i = 0;
+	var last_scream_time = 0;
+
+	function scream() {
+		var now = new Date();
+		var distance_seconds = (now - last_scream_time) / 1000.0;
+		if(distance_seconds < 1.0) return;
+		last_scream_time = new Date();
+		var audios = document.body.getElementsByTagName("audio");
+		audios[scream_i].muted = false;
+		audios[scream_i].play();
+		scream_i = (scream_i + 1) % audios.length;
+	}
+
+	function update_face() {
+		var audios = document.body.getElementsByTagName("audio");
+		var screaming = 0;
+		var all_loaded = 1;
+		for(var i = 0; i < audios.length; i++) {
+			var audio = audios[i];
+			if (!audio.paused && !audio.muted) screaming += 1;
+			if (audio.readyState < 2) {
+				all_loaded = 0;
+			}
+		}
+		if (all_loaded > 0) {
+			document.body.style.backgroundColor = screaming <= 0 ? "white" : "red";
+			document.getElementById("angryface").hidden = screaming <= 0;
+			document.getElementById("happyface").hidden = screaming > 0;
+		}
+	}
+	var x = setInterval(update_face, 100);
+	scream();
+	window.addEventListener('devicemotion', (event) => {
+		let x = event.acceleration.x;
+		let y = event.acceleration.y;
+		let z = event.acceleration.z;
+		var acc = x * x + y * y + z * z;
+		acc = Math.sqrt(parseFloat(acc));
+		var t = "Acc: ";
+		t += `${x} m/s2`;
+		t += ", ";
+		t += `${y} m/s2`;
+		t += ", ";
+		t += `${z} m/s2`;
+		t += "<br>";
+		var threshold = parseFloat(document.getElementById("demo").innerHTML) / 10.0;
+		if(acc > threshold) {
+			scream();
+		}
+		document.getElementById("content").innerHTML = t;
+	});
+	</script>
+</body>
+
+</html>
