@@ -66,7 +66,7 @@
 </head>
 
 <body>
-	<h1> Chu Tich Khoa Simulator </h1>
+	<h1> Chu Tich Khoa Simulator v2 </h1>
 	<div class="slidecontainer">
 		<input type="range" min="1" max="500" value="100" class="slider" id="myRange">
 		<p>Sensitivity Threshold: <span id="demo"></span></p>
@@ -94,6 +94,15 @@
 	var scream_i = 0;
 	var last_scream_time = 0;
 
+        // Preload and prime audio system
+        window.addEventListener('load', () => {
+            let audios = document.querySelectorAll('audio');
+            audios.forEach(audio => {
+                audio.muted = true; // Play silently
+                audio.play().then(() => audio.pause()); // Prime the audio for playback
+            });
+        });
+		
 	function scream() {
 		var now = new Date();
 		var distance_seconds = (now - last_scream_time) / 1000.0;
