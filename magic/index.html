@@ -24,8 +24,10 @@
             padding: 2rem;
             border-radius: 1rem; /* More rounded corners */
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
-            max-width: 650px; /* Adjusted max-width to comfortably fit 4 vertical columns */
-            width: 100%;
+            /* min-width ensures enough space for 4 columns, might cause horizontal scroll on very small screens */
+            min-width: 432px; /* Calculated to fit 4 columns (4*4.5rem cards + gaps + padding) */
+            max-width: 650px; /* Keep max-width for larger screens */
+            width: 100%; /* Allow it to shrink up to its min-width */
             text-align: center;
         }
 
@@ -77,7 +79,7 @@
         /* New container for the suit columns */
         #suitColumnWrapper {
             display: flex; /* Use flexbox to arrange suit columns horizontally */
-            flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+            /* Removed flex-wrap: wrap to ensure columns never wrap, always stay in one row */
             justify-content: center; /* Center the columns */
             gap: 1rem; /* Gap between suit columns */
             margin-bottom: 2rem; /* Space below the card grid */
@@ -105,27 +107,13 @@
 
         /* Responsive adjustments for smaller screens (smartphones) */
         @media (max-width: 640px) {
-            #suitColumnWrapper {
-                flex-direction: column; /* Stack columns vertically on very small screens */
-                align-items: center;
-            }
-            .suit-column {
-                width: 100%; /* Full width for columns when stacked */
-                max-width: 200px; /* Limit individual column width to prevent stretching too wide */
-            }
+            /* Removed flex-direction: column for #suitColumnWrapper as we want 4 columns always */
+            /* Removed width: 100% and max-width on .suit-column as they are now flex items in a row */
             .container {
                 padding: 1rem; /* Reduce padding on smaller screens */
+                /* min-width is set above to ensure 4 columns, potentially causing horizontal scroll */
             }
-            .card {
-                width: 4rem; /* Slightly smaller card width on small screens */
-                height: 5.8rem; /* Slightly smaller card height on small screens */
-            }
-            .card-rank {
-                font-size: 1.1rem; /* Adjust font size for rank on smaller cards */
-            }
-            .card-suit {
-                font-size: 2.2rem; /* Adjust font size for suit on smaller cards */
-            }
+            /* Card and font sizes remain consistent to maintain visual integrity across sizes */
         }
     </style>
 </head>
