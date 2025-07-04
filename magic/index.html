@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch Me If You Can</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font and basic body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 1rem; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
+            max-width: 650px; /* Adjusted max-width to comfortably fit 4 vertical columns */
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Styling for individual cards */
+        .card {
+            width: 4.5rem; /* Card width */
+            height: 6.5rem; /* Card height */
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative; /* For absolute positioning of rank and suit */
+            cursor: pointer;
+            user-select: none; /* Prevent text selection on cards */
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out, border 0.1s ease-in-out;
+            border: 2px solid transparent; /* Default transparent border */
+        }
+        .card:hover {
+            transform: translateY(-3px); /* Slight lift effect on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .card.selected {
+            border-color: #3b82f6; /* Blue border for selected card */
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* Blue glow */
+            transform: scale(1.05); /* Slightly enlarge selected card */
+        }
+
+        /* Styling for rank and suit within the card */
+        .card-rank {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: bold;
+            position: absolute;
+            top: 0.25rem; /* Small padding from top edge */
+            left: 0.25rem; /* Small padding from left edge */
+        }
+        .card-suit {
+            font-size: 2.5rem; /* Larger suit symbol for prominence */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the suit symbol */
+        }
+        .red-suit {
+            color: #ef4444; /* Tailwind red-500 */
+        }
+        .black-suit {
+            color: #1f2937; /* Tailwind gray-800 */
+        }
+
+        /* New container for the suit columns */
+        #suitColumnWrapper {
+            display: flex; /* Use flexbox to arrange suit columns horizontally */
+            flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+            justify-content: center; /* Center the columns */
+            gap: 1rem; /* Gap between suit columns */
+            margin-bottom: 2rem; /* Space below the card grid */
+        }
+
+        /* Styling for each suit column */
+        .suit-column {
+            display: flex;
+            flex-direction: column; /* Stack cards vertically within each suit column */
+            gap: 0.25rem; /* Smaller gap between cards in a column */
+            align-items: center; /* Center cards within their column */
+            min-width: 5rem; /* Ensure columns have a minimum width */
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: #f9fafb; /* Slightly different background for columns */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+        }
+
+        .suit-column-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.5rem;
+            color: #4b5563; /* Tailwind gray-700 */
+        }
+
+        /* Responsive adjustments for smaller screens (smartphones) */
+        @media (max-width: 640px) {
+            #suitColumnWrapper {
+                flex-direction: column; /* Stack columns vertically on very small screens */
+                align-items: center;
+            }
+            .suit-column {
+                width: 100%; /* Full width for columns when stacked */
+                max-width: 200px; /* Limit individual column width to prevent stretching too wide */
+            }
+            .container {
+                padding: 1rem; /* Reduce padding on smaller screens */
+            }
+            .card {
+                width: 4rem; /* Slightly smaller card width on small screens */
+                height: 5.8rem; /* Slightly smaller card height on small screens */
+            }
+            .card-rank {
+                font-size: 1.1rem; /* Adjust font size for rank on smaller cards */
+            }
+            .card-suit {
+                font-size: 2.2rem; /* Adjust font size for suit on smaller cards */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Catch me if you can</h1>
+        <p class="text-lg text-gray-700 mb-6">Story 1 place holder: choose a card</p>
+
+        <div id="suitColumnWrapper">
+            <!-- Suit columns and cards will be dynamically generated by JavaScript -->
+        </div>
+
+        <p id="resultParagraph" class="text-xl font-semibold text-gray-800 mt-8 hidden">
+            <!-- Result will be displayed here -->
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const suitColumnWrapper = document.getElementById('suitColumnWrapper');
+            const resultParagraph = document.getElementById('resultParagraph');
+            let selectedCardElement = null; // To keep track of the currently selected card's DOM element
+
+            // Define the custom mapping from card name to its numerical value.
+            // This map can be easily customized to change card values as needed.
+            const cardValuesMap = {
+                // Spades 
+                'A of Spades': 7, '2 of Spades': 10, '3 of Spades': 21, '4 of Spades': 40,
+                '5 of Spades': 16, '6 of Spades': 15, '7 of Spades': 37, '8 of Spades': 22,
+                '9 of Spades': 9, '10 of Spades': 34, 'J of Spades': 45, 'Q of Spades': 48,
+                'K of Spades': 31,
+
+                // Clubs 
+                'A of Clubs': 43, '2 of Clubs': 27, '3 of Clubs': 4, '4 of Clubs': 1,
+                '5 of Clubs': 30, '6 of Clubs': 50, '7 of Clubs': 47, '8 of Clubs': 33,
+                '9 of Clubs': 44, '10 of Clubs': 24, 'J of Clubs': 36, 'Q of Clubs': 13,
+                'K of Clubs': 18,
+
+                // Diamonds 
+                'A of Diamonds': 39, '2 of Diamonds': 19, '3 of Diamonds': 12, '4 of Diamonds': 42,
+                '5 of Diamonds': 25, '6 of Diamonds': 6, '7 of Diamonds': 3, '8 of Diamonds': 29,
+                '9 of Diamonds': 52, '10 of Diamonds': 49, 'J of Diamonds': 32, 'Q of Diamonds': 46,
+                'K of Diamonds': 26,
+
+                // Hearts 
+                'A of Hearts': 51, '2 of Hearts': 2, '3 of Hearts': 28, '4 of Hearts': 5,
+                '5 of Hearts': 8, '6 of Hearts': 23, '7 of Hearts': 41, '8 of Hearts': 14,
+                '9 of Hearts': 17, '10 of Hearts': 38, 'J of Hearts': 20, 'Q of Hearts': 11,
+                'K of Hearts': 35
+
+            };
+
+            // Define suit and rank data for card generation.
+            const suits = [
+                { name: 'Spades', symbol: '♠️', colorClass: 'black-suit' },
+                { name: 'Clubs', symbol: '♣️', colorClass: 'black-suit' },
+                { name: 'Diamonds', symbol: '♦️', colorClass: 'red-suit' },
+                { name: 'Hearts', symbol: '♥️', colorClass: 'red-suit' }
+
+            ];
+            const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+            /**
+             * Generates and appends all 52 playing cards to their respective suit columns.
+             * Each card is clickable and updates the result display.
+             */
+            function generateCards() {
+                // Create a container for each suit and append it to the main wrapper.
+                const suitContainers = {};
+                suits.forEach(suit => {
+                    const suitColumnDiv = document.createElement('div');
+                    suitColumnDiv.classList.add('suit-column');
+                    suitColumnDiv.id = `${suit.name.toLowerCase()}Container`; // e.g., 'clubsContainer'
+
+                    const title = document.createElement('h3');
+                    title.classList.add('suit-column-title');
+                    title.textContent = suit.name;
+                    suitColumnDiv.appendChild(title);
+
+                    suitColumnWrapper.appendChild(suitColumnDiv);
+                    suitContainers[suit.name.toLowerCase()] = suitColumnDiv; // Store reference for later use
+                });
+
+                // Populate cards into their respective suit containers.
+                suits.forEach(suit => {
+                    ranks.forEach(rank => {
+                        const cardName = `${rank} of ${suit.name}`; // e.g., "A of Clubs"
+                        const cardValue = cardValuesMap[cardName]; // Look up the numerical value from the map
+
+                        // Create the main card div element.
+                        const cardDiv = document.createElement('div');
+                        cardDiv.classList.add('card');
+                        cardDiv.dataset.value = cardValue; // Store the numerical value as a data attribute
+
+                        // Create the rank element (e.g., 'A', 'K', '10').
+                        const rankSpan = document.createElement('span');
+                        rankSpan.classList.add('card-rank', suit.colorClass);
+                        rankSpan.textContent = rank;
+
+                        // Create the suit symbol element (e.g., '♣️', '♥️').
+                        const suitSymbol = document.createElement('span');
+                        suitSymbol.classList.add('card-suit', suit.colorClass);
+                        suitSymbol.textContent = suit.symbol;
+
+                        // Append rank and suit elements to the card div.
+                        cardDiv.appendChild(rankSpan);
+                        cardDiv.appendChild(suitSymbol);
+
+                        // Add a click event listener to handle card selection.
+                        cardDiv.addEventListener('click', () => {
+                            // Remove 'selected' class from the previously selected card, if any.
+                            if (selectedCardElement) {
+                                selectedCardElement.classList.remove('selected');
+                            }
+
+                            // Add 'selected' class to the newly clicked card.
+                            cardDiv.classList.add('selected');
+                            selectedCardElement = cardDiv; // Update the reference to the currently selected card.
+
+                            // Get the chosen numerical value and calculate the difference from 52.
+                            const chosenValue = parseInt(cardDiv.dataset.value, 10);
+                            const difference = 52 - chosenValue;
+
+                            // Update the result paragraph with the selected card's information.
+                            resultParagraph.innerHTML = `You have chosen the card number <br><br><font size=30 color=red>${chosenValue}</font><br><br>`
+                            if (chosenValue <= 7)
+                                resultParagraph.innerHTML += `0 + ${chosenValue - 0}`
+
+                            else if (chosenValue <= 13)
+                                resultParagraph.innerHTML += `13 - ${13 - chosenValue}`
+                            else if (chosenValue <= 20)
+                                resultParagraph.innerHTML += `13 + ${chosenValue - 13}`
+
+                            else if (chosenValue <= 26)
+                                resultParagraph.innerHTML += `26 - ${26 - chosenValue}`
+                            else if (chosenValue <= 33)
+                                resultParagraph.innerHTML += `26 + ${chosenValue - 26}`
+
+                            else if (chosenValue <= 39)
+                                resultParagraph.innerHTML += `39 - ${39 - chosenValue}`
+                            else if (chosenValue <= 46)
+                                resultParagraph.innerHTML += `39 + ${chosenValue - 39}`
+
+                            else 
+                                resultParagraph.innerHTML += `52 - ${52 - chosenValue}`
+
+
+                            
+                            resultParagraph.classList.remove('hidden'); // Ensure the result paragraph is visible.
+                        });
+
+                        // Append the created card to its specific suit column container.
+                        suitContainers[suit.name.toLowerCase()].appendChild(cardDiv);
+                    });
+                });
+            }
+
+            // Call the function to generate all cards when the DOM is fully loaded.
+            generateCards();
+        });
+    </script>
+</body>
+</html>
