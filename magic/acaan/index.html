@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACAAN</title>
+    <!-- Tailwind CSS CDN for styling - provides responsive utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for overall aesthetics and font consistency */
+        body {
+            font-family: 'Inter', sans-serif; /* Preferred font */
+            background-color: #f0f4f8; /* Light blue-gray background for a clean look */
+            display: flex;
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            margin: 0;
+            padding: 20px; /* Add padding around the content for spacing on all devices */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container {
+            background-color: #ffffff; /* White background for the main application container */
+            padding: 32px; /* Generous padding inside the container */
+            border-radius: 16px; /* Significantly rounded corners for a modern feel */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft, subtle shadow for depth */
+            max-width: 900px; /* Max width to prevent content from stretching too wide on large screens */
+            width: 100%; /* Ensure container takes full width on smaller screens */
+            text-align: center; /* Center text within the container */
+        }
+        h1 {
+            color: #1a202c; /* Dark text for the main heading */
+            margin-bottom: 24px; /* Space below the heading */
+        }
+        label {
+            display: block; /* Make labels block-level for better spacing */
+            margin-bottom: 8px;
+            font-weight: 600; /* Semi-bold label text */
+            color: #2d3748; /* Slightly lighter dark text for labels */
+            text-align: left; /* Align labels to the left for standard form appearance */
+        }
+        .selection-table-container {
+            overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
+            margin-bottom: 20px;
+            /* Hide scrollbar for a cleaner look, but still allow scrolling */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .selection-table-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .selection-table {
+            width: 100%; /* Ensure table takes full width of its container */
+            border-collapse: collapse; /* Collapse borders for a cleaner, single-line border */
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem; /* Slightly larger font for table cells for better readability on mobile */
+            min-width: 500px; /* Ensure table has a minimum width for scrolling on very small screens */
+        }
+        .selection-table th, .selection-table td {
+            border: 1px solid #e2e8f0; /* Light gray border for cells */
+            padding: 8px; /* Padding inside cells for touchability */
+            text-align: center;
+            cursor: pointer; /* Indicate clickable cells */
+            border-radius: 4px; /* Slightly rounded corners for individual cells */
+            transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth transitions for hover/click effects */
+        }
+        .selection-table th {
+            background-color: #edf2f7; /* Light gray header background */
+            font-weight: 700; /* Bold header text */
+            color: #2d3748;
+            padding: 12px 8px; /* More padding for headers */
+        }
+        .selection-table td:hover {
+            background-color: #e0f2fe; /* Lighter blue on hover */
+            transform: translateY(-1px); /* Subtle lift effect on hover */
+        }
+        .selection-table td.selected {
+            background-color: #90cdf4; /* Blue background for selected cell */
+            color: #1a202c; /* Darker text for selected cell */
+            font-weight: 600;
+            box-shadow: inset 0 0 0 2px #4299e1; /* Inner blue border to clearly show selection */
+        }
+        /* Style for red suits (Diamonds and Hearts) */
+        .red-suit {
+            color: #ef4444; /* Tailwind red-500 for card symbols and text */
+        }
+        button {
+            background-color: #4299e1; /* Vibrant blue button */
+            color: white;
+            padding: 12px 24px; /* Generous padding for easy tapping */
+            border-radius: 8px; /* Rounded button corners */
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem; /* Good font size for readability */
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3); /* Soft shadow for depth */
+        }
+        button:hover {
+            background-color: #3182ce; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+        #result {
+            margin-top: 24px;
+            font-size: 1.25rem; /* Larger font for the result text */
+            font-weight: 500;
+            color: #2b6cb0; /* Darker blue for result text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-bold mb-6 text-gray-800">ACAAN</h1>
+
+        <div class="mb-6">
+            <label class="text-lg text-gray-700">Select a Card:</label>
+            <!-- Container for card table, allowing horizontal scroll on small screens -->
+            <div id="cardTableContainer" class="selection-table-container">
+                <table id="cardTable" class="selection-table">
+                    <thead>
+                        <tr>
+                            <th>Spades ♠</th>
+                            <th>Clubs ♣</th>
+                            <th class="red-suit">Diamonds ♦</th>
+                            <th class="red-suit">Hearts ♥</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Card cells will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <label class="text-lg text-gray-700">Select a Number (1-52):</label>
+            <!-- Container for number table, allowing horizontal scroll on small screens -->
+            <div id="numberTableContainer" class="selection-table-container">
+                <table id="numberTable" class="selection-table">
+                    <tbody>
+                        <!-- Number cells will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button id="showResultBtn" class="px-6 py-3 rounded-lg">Show Selection</button>
+
+        <p id="result" class="mt-8 text-xl font-semibold text-blue-700"></p>
+    </div>
+
+    <script>
+        // JavaScript for generating interactive tables and handling user selections
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get references to DOM elements
+            const cardTableBody = document.getElementById('cardTable').getElementsByTagName('tbody')[0];
+            const numberTableBody = document.getElementById('numberTable').getElementsByTagName('tbody')[0];
+            const showResultBtn = document.getElementById('showResultBtn');
+            const resultParagraph = document.getElementById('result');
+
+            // Variables to store currently selected card and number
+            let selectedCard = null;
+            let selectedNumber = null;
+
+            // Define card properties
+            const suits = ['Spades', 'Clubs', 'Diamonds', 'Hearts'];
+            const suitSymbols = ['♠', '♣', '♦', '♥']; // Corresponding Unicode symbols for display
+            const ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'];
+
+            // Card to value mapping
+            const cardValuesMap = {
+                // Spades
+                'Ace of Spades ♠': 7, '2 of Spades ♠': 10, '3 of Spades ♠': 21, '4 of Spades ♠': 40,
+                '5 of Spades ♠': 16, '6 of Spades ♠': 15, '7 of Spades ♠': 37, '8 of Spades ♠': 22,
+                '9 of Spades ♠': 9, '10 of Spades ♠': 34, 'Jack of Spades ♠': 45, 'Queen of Spades ♠': 48,
+                'King of Spades ♠': 31,
+
+                // Clubs
+                'Ace of Clubs ♣': 43, '2 of Clubs ♣': 27, '3 of Clubs ♣': 4, '4 of Clubs ♣': 1,
+                '5 of Clubs ♣': 30, '6 of Clubs ♣': 50, '7 of Clubs ♣': 47, '8 of Clubs ♣': 33,
+                '9 of Clubs ♣': 44, '10 of Clubs ♣': 24, 'Jack of Clubs ♣': 36, 'Queen of Clubs ♣': 13,
+                'King of Clubs ♣': 18,
+
+                // Diamonds
+                'Ace of Diamonds ♦': 39, '2 of Diamonds ♦': 19, '3 of Diamonds ♦': 12, '4 of Diamonds ♦': 42,
+                '5 of Diamonds ♦': 25, '6 of Diamonds ♦': 6, '7 of Diamonds ♦': 3, '8 of Diamonds ♦': 29,
+                '9 of Diamonds ♦': 52, '10 of Diamonds ♦': 49, 'Jack of Diamonds ♦': 32, 'Queen of Diamonds ♦': 46,
+                'King of Diamonds ♦': 26,
+
+                // Hearts
+                'Ace of Hearts ♥': 51, '2 of Hearts ♥': 2, '3 of Hearts ♥': 28, '4 of Hearts ♥': 5,
+                '5 of Hearts ♥': 8, '6 of Hearts ♥': 23, '7 of Hearts ♥': 41, '8 of Hearts ♥': 14,
+                '9 of Hearts ♥': 17, '10 of Hearts ♥': 38, 'Jack of Hearts ♥': 20, 'Queen of Hearts ♥': 11,
+                'King of Hearts ♥': 35
+            };
+
+            // Create a reverse map for card values to card names for easy lookup
+            const valueToCardMap = {};
+            for (const cardName in cardValuesMap) {
+                const value = cardValuesMap[cardName];
+                valueToCardMap[value] = cardName;
+            }
+
+            /**
+             * Generates and populates the playing card selection table.
+             * Each cell represents a card, with shorthand notation and full name stored in data attributes.
+             */
+            function generateCardTable() {
+                for (let i = 0; i < ranks.length; i++) {
+                    const rank = ranks[i];
+                    const row = cardTableBody.insertRow(); // Create a new table row for each card rank
+                    for (let j = 0; j < suits.length; j++) {
+                        const suit = suits[j];
+                        const symbol = suitSymbols[j];
+                        // Ensure the full card name matches the keys in cardValuesMap
+                        const cardName = `${rank} of ${suit} ${symbol}`;
+
+                        const cell = row.insertCell(); // Create a new table cell
+                        // Display shorthand: A♠, 10♣, K♦ etc.
+                        cell.textContent = `${rank.substring(0, 1)}${rank === '10' ? '0' : ''}${symbol}`;
+                        cell.dataset.fullCardName = cardName; // Store the full card name in a data attribute
+                        cell.classList.add('card-cell'); // Add a class for easy event delegation and styling
+
+                        // Apply 'red-suit' class for Diamonds and Hearts for visual distinction
+                        if (suit === 'Diamonds' || suit === 'Hearts') {
+                            cell.classList.add('red-suit');
+                        }
+                    }
+                }
+            }
+
+            /**
+             * Generates and populates the number selection table (1 to 52).
+             * Numbers are arranged in rows for better visual organization.
+             */
+            function generateNumberTable() {
+                const numbersPerRow = 13; // Arrange numbers in rows of 13 to align visually with card ranks
+                for (let i = 0; i < 52; i++) {
+                    if (i % numbersPerRow === 0) {
+                        numberTableBody.insertRow(); // Start a new row every 'numbersPerRow' cells
+                    }
+                    const currentRow = numberTableBody.rows[Math.floor(i / numbersPerRow)];
+                    const cell = currentRow.insertCell(); // Create a new table cell
+                    const number = i + 1; // Calculate the number (1 to 52)
+                    cell.textContent = number;
+                    cell.dataset.number = number; // Store the number in a data attribute
+                    cell.classList.add('number-cell'); // Add a class for easy event delegation and styling
+                }
+            }
+
+            // Initialize the card and number tables when the DOM is ready
+            generateCardTable();
+            generateNumberTable();
+
+            /**
+             * Handles clicks on the card selection table.
+             * Manages the 'selected' class to highlight the chosen card.
+             */
+            cardTableBody.addEventListener('click', (event) => {
+                const clickedCell = event.target;
+                // Ensure the clicked element is a card cell
+                if (clickedCell.classList.contains('card-cell')) {
+                    // Remove 'selected' class from any previously selected card cell
+                    const previouslySelected = cardTableBody.querySelector('.card-cell.selected');
+                    if (previouslySelected) {
+                        previouslySelected.classList.remove('selected');
+                    }
+                    // Add 'selected' class to the newly clicked card cell
+                    clickedCell.classList.add('selected');
+                    // Store the full card name from the data attribute
+                    selectedCard = clickedCell.dataset.fullCardName;
+                }
+            });
+
+            /**
+             * Handles clicks on the number selection table.
+             * Manages the 'selected' class to highlight the chosen number.
+             */
+            numberTableBody.addEventListener('click', (event) => {
+                const clickedCell = event.target;
+                // Ensure the clicked element is a number cell
+                if (clickedCell.classList.contains('number-cell')) {
+                    // Remove 'selected' class from any previously selected number cell
+                    const previouslySelected = numberTableBody.querySelector('.number-cell.selected');
+                    if (previouslySelected) {
+                        previouslySelected.classList.remove('selected');
+                    }
+                    // Add 'selected' class to the newly clicked number cell
+                    clickedCell.classList.add('selected');
+                    // Store the selected number from the data attribute
+                    selectedNumber = clickedCell.dataset.number;
+                }
+            });
+
+            /**
+             * Handles the click event for the "Show Selection" button.
+             * Displays the selected card and number, or prompts the user to select both.
+             */
+            showResultBtn.addEventListener('click', () => {
+                if (selectedCard && selectedNumber) {
+                    // Get the value from the map using the full card name
+                    const cardValue = cardValuesMap[selectedCard];
+                    const numSelected = parseInt(selectedNumber); // Convert selected number to integer
+
+                    if (cardValue !== undefined) {
+                        let magicNumber = cardValue - numSelected;
+
+                        // If magic number is 0 or lower, add 52
+                        if (magicNumber <= 0) {
+                            magicNumber += 52;
+                        }
+
+                        // Find the magic card using the reverse map
+                        const magicCard = valueToCardMap[magicNumber];
+
+                        if (magicCard) {
+                            resultParagraph.innerHTML = `You selected the card "${selectedCard}" value ${cardValue}, and the number "${selectedNumber}".<br>Your magic number is ${magicNumber} card "${magicCard}".`;
+                        } else {
+                            resultParagraph.textContent = `Error: Magic card not found for magic number ${magicNumber}.`;
+                        }
+                    } else {
+                        resultParagraph.textContent = `Error: Value not found for selected card "${selectedCard}".`;
+                    }
+                } else {
+                    resultParagraph.textContent = "Please select both a card and a number to see the result.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
