@@ -83,19 +83,55 @@
             font-weight: 600;
             box-shadow: inset 0 0 0 2px #63b3ed; /* Lighter blue border to clearly show selection */
         }
-        /* Style for red suits (Diamonds and Hearts) */
+        /* Style for red suits (Diamonds and Hearts) in tables */
         .red-suit {
             color: #fc8181; /* Lighter red for visibility on dark background (Tailwind red-300) */
         }
-        /* Style for the highlighted magic card in the sequence */
-        .highlight-card {
-            font-weight: 700; /* Make it bold */
-            color: #81e6d9; /* A distinct light teal color for highlight */
-            /* You could also add a background or border if desired */
-            /* background-color: rgba(129, 230, 217, 0.2); */
-            padding: 2px 4px;
-            border-radius: 4px;
+
+        /* Styling for each card-value pair in the sequence */
+        .sequence-item-wrapper {
+            display: inline-flex; /* Use flex for internal alignment */
+            align-items: center;
+            gap: 4px; /* Space between shorthand and value */
+            padding: 4px 8px; /* Padding for each item block */
+            border-radius: 8px;
+            white-space: nowrap; /* Prevent wrapping within a card item */
+            background-color: #e2e8f0; /* Light background for the whole item */
         }
+
+        /* Specific styling for the card shorthand part */
+        .card-shorthand {
+            /* Default text color for black suits */
+            color: #1a202c; /* Black text for spades and clubs */
+        }
+
+        /* Specific styling for the value part */
+        .card-value-display {
+            background-color: #4a5568; /* Dark background */
+            color: #f7fafc; /* Light text */
+            padding: 2px 6px; /* Padding within the value tag */
+            border-radius: 4px; /* Rounded corners for the value tag */
+            font-size: 0.85em; /* Slightly smaller font for value */
+            font-weight: normal; /* Ensure it's not bold by default */
+        }
+
+        /* Style for red suits in the magic sequence */
+        .red-card-shorthand {
+            color: #ef4444; /* Red text for red suits (Tailwind red-500) */
+        }
+
+        /* Style for the highlighted magic card's shorthand in the sequence */
+        .highlight-shorthand {
+            font-weight: 700; /* Make it bold */
+            /* Color is now handled by .card-shorthand or .red-card-shorthand */
+        }
+
+        /* Style for the highlighted middle item wrapper */
+        .sequence-item-wrapper.highlighted {
+            background-color: #b2f5ea; /* Light green background for highlight (Tailwind teal-200) */
+            border: 1px solid #38b2ac; /* Teal border */
+        }
+
         button {
             background-color: #63b3ed; /* Lighter blue button for dark theme */
             color: #1a202c; /* Dark text for button for better contrast */
@@ -249,7 +285,6 @@
                 return `${rankPart}${suitSymbol}`;
             }
 
-
             /**
              * Generates and populates the playing card selection table.
              * Each cell represents a card, with shorthand notation and full name stored in data attributes.
@@ -300,6 +335,30 @@
             // Initialize the card and number tables when the DOM is ready
             generateCardTable();
             generateNumberTable();
+
+            // Set default selections and highlight them
+            const defaultCardFullName = '4 of Clubs ♣';
+            const defaultNumber = '1';
+
+            selectedCard = defaultCardFullName;
+            selectedNumber = defaultNumber;
+
+            // Highlight the default card
+            const defaultCardCell = Array.from(cardTableBody.querySelectorAll('.card-cell')).find(cell =>
+                cell.dataset.fullCardName === defaultCardFullName
+            );
+            if (defaultCardCell) {
+                defaultCardCell.classList.add('selected');
+            }
+
+            // Highlight the default number
+            const defaultNumberCell = Array.from(numberTableBody.querySelectorAll('.number-cell')).find(cell =>
+                cell.dataset.number === defaultNumber
+            );
+            if (defaultNumberCell) {
+                defaultNumberCell.classList.add('selected');
+            }
+
 
             /**
              * Handles clicks on the card selection table.
@@ -367,20 +426,38 @@
                             const magicSequence = [];
                             for (let i = -3; i <= 3; i++) {
                                 const seqValue = getWrappedCardValue(magicNumber + i);
-                                const seqCard = valueToCardMap[seqValue];
-                                let displayCard = seqCard ? getCardShorthand(seqCard) : `[${seqValue}]`;
+                                const seqCard = valueToCardMap[seqValue]; // Full card name
+                                const displayCardShorthand = seqCard ? getCardShorthand(seqCard) : `[${seqValue}]`;
+                                const displayValue = seqValue;
+
+                                let shorthandClasses = 'card-shorthand';
+                                let itemWrapperClasses = 'sequence-item-wrapper';
+
+                                // Determine if the card is a red suit for styling the shorthand
+                                const isRedSuit = seqCard && (seqCard.includes('Diamonds') || seqCard.includes('Hearts'));
+                                if (isRedSuit) {
+                                    shorthandClasses += ' red-card-shorthand';
+                                } else if (seqCard && (seqCard.includes('Spades') || seqCard.includes('Clubs'))) {
+                                    // Explicitly add black text class for black suits
+                                    shorthandClasses += ' black-card-shorthand';
+                                }
 
                                 // Highlight the middle card (when i is 0)
                                 if (i === 0) {
-                                    displayCard = `<span class="highlight-card">${displayCard}</span>`;
+                                    itemWrapperClasses += ' highlighted';
+                                    // No need to add highlight-shorthand for color, as suit color applies
+                                    shorthandClasses += ' highlight-shorthand'; // Keep this for bolding if needed
                                 }
-                                magicSequence.push(displayCard);
+
+                                // Construct the HTML for each card-value pair
+                                const cardHtml = `<span class="${itemWrapperClasses}"><span class="${shorthandClasses}">${displayCardShorthand}</span> <span class="card-value-display">${displayValue}</span></span>`;
+                                magicSequence.push(cardHtml);
                             }
 
                             // Use getCardShorthand for the selected card in the result text
                             const displaySelectedCard = getCardShorthand(selectedCard);
 
-                            // Join the magic sequence with a pipe separator
+                            // Join the magic sequence with a pipe separator for visual separation between items
                             const magicSequenceDisplay = magicSequence.join(' | ');
 
                             resultParagraph.innerHTML = `You selected the card "${displaySelectedCard}" value ${cardValue}, and the number "${selectedNumber}".<br>Your magic number is ${magicNumber} card "${getCardShorthand(magicCard)}".<br><br>Your magic sequence is: <br>${magicSequenceDisplay}`;
