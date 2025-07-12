@@ -10,7 +10,7 @@
         /* Custom styles for overall aesthetics and font consistency */
         body {
             font-family: 'Inter', sans-serif; /* Preferred font */
-            background-color: #f0f4f8; /* Light blue-gray background for a clean look */
+            background-color: #1a202c; /* Dark blue-gray background for dark theme */
             display: flex;
             justify-content: center; /* Center content horizontally */
             align-items: center; /* Center content vertically */
@@ -18,25 +18,26 @@
             margin: 0;
             padding: 20px; /* Add padding around the content for spacing on all devices */
             box-sizing: border-box; /* Include padding in element's total width and height */
+            color: #e2e8f0; /* Light text color for general body text */
         }
         .container {
-            background-color: #ffffff; /* White background for the main application container */
+            background-color: #2d3748; /* Slightly lighter dark background for the main container */
             padding: 32px; /* Generous padding inside the container */
             border-radius: 16px; /* Significantly rounded corners for a modern feel */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft, subtle shadow for depth */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* More prominent shadow for depth in dark mode */
             max-width: 900px; /* Max width to prevent content from stretching too wide on large screens */
             width: 100%; /* Ensure container takes full width on smaller screens */
             text-align: center; /* Center text within the container */
         }
         h1 {
-            color: #1a202c; /* Dark text for the main heading */
+            color: #f7fafc; /* Very light text for the main heading */
             margin-bottom: 24px; /* Space below the heading */
         }
         label {
             display: block; /* Make labels block-level for better spacing */
             margin-bottom: 8px;
             font-weight: 600; /* Semi-bold label text */
-            color: #2d3748; /* Slightly lighter dark text for labels */
+            color: #cbd5e0; /* Light gray text for labels */
             text-align: left; /* Align labels to the left for standard form appearance */
         }
         .selection-table-container {
@@ -59,7 +60,7 @@
             min-width: 500px; /* Ensure table has a minimum width for scrolling on very small screens */
         }
         .selection-table th, .selection-table td {
-            border: 1px solid #e2e8f0; /* Light gray border for cells */
+            border: 1px solid #4a5568; /* Darker gray border for cells in dark mode */
             padding: 8px; /* Padding inside cells for touchability */
             text-align: center;
             cursor: pointer; /* Indicate clickable cells */
@@ -67,28 +68,37 @@
             transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth transitions for hover/click effects */
         }
         .selection-table th {
-            background-color: #edf2f7; /* Light gray header background */
+            background-color: #4a5568; /* Darker gray header background */
             font-weight: 700; /* Bold header text */
-            color: #2d3748;
+            color: #f7fafc; /* Light text for headers */
             padding: 12px 8px; /* More padding for headers */
         }
         .selection-table td:hover {
-            background-color: #e0f2fe; /* Lighter blue on hover */
+            background-color: #4299e1; /* Blue on hover for dark theme */
             transform: translateY(-1px); /* Subtle lift effect on hover */
         }
         .selection-table td.selected {
-            background-color: #90cdf4; /* Blue background for selected cell */
-            color: #1a202c; /* Darker text for selected cell */
+            background-color: #2b6cb0; /* Darker blue background for selected cell */
+            color: #f7fafc; /* Light text for selected cell */
             font-weight: 600;
-            box-shadow: inset 0 0 0 2px #4299e1; /* Inner blue border to clearly show selection */
+            box-shadow: inset 0 0 0 2px #63b3ed; /* Lighter blue border to clearly show selection */
         }
         /* Style for red suits (Diamonds and Hearts) */
         .red-suit {
-            color: #ef4444; /* Tailwind red-500 for card symbols and text */
+            color: #fc8181; /* Lighter red for visibility on dark background (Tailwind red-300) */
+        }
+        /* Style for the highlighted magic card in the sequence */
+        .highlight-card {
+            font-weight: 700; /* Make it bold */
+            color: #81e6d9; /* A distinct light teal color for highlight */
+            /* You could also add a background or border if desired */
+            /* background-color: rgba(129, 230, 217, 0.2); */
+            padding: 2px 4px;
+            border-radius: 4px;
         }
         button {
-            background-color: #4299e1; /* Vibrant blue button */
-            color: white;
+            background-color: #63b3ed; /* Lighter blue button for dark theme */
+            color: #1a202c; /* Dark text for button for better contrast */
             padding: 12px 24px; /* Generous padding for easy tapping */
             border-radius: 8px; /* Rounded button corners */
             border: none;
@@ -96,35 +106,35 @@
             font-size: 1.1rem; /* Good font size for readability */
             font-weight: 600;
             transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
-            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3); /* Soft shadow for depth */
+            box-shadow: 0 4px 10px rgba(99, 179, 237, 0.3); /* Soft shadow for depth */
         }
         button:hover {
-            background-color: #3182ce; /* Darker blue on hover */
+            background-color: #4299e1; /* Slightly darker blue on hover */
             transform: translateY(-2px); /* Slight lift effect on hover */
         }
         #result {
             margin-top: 24px;
             font-size: 1.25rem; /* Larger font for the result text */
             font-weight: 500;
-            color: #2b6cb0; /* Darker blue for result text */
+            color: #90cdf4; /* Lighter blue for result text in dark mode */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-4xl font-bold mb-6 text-gray-800">ACAAN</h1>
+        <h1 class="text-4xl font-bold mb-6">ACAAN</h1>
 
         <div class="mb-6">
-            <label class="text-lg text-gray-700">Select a Card:</label>
+            <label class="text-lg">Select a Card:</label>
             <!-- Container for card table, allowing horizontal scroll on small screens -->
             <div id="cardTableContainer" class="selection-table-container">
                 <table id="cardTable" class="selection-table">
                     <thead>
                         <tr>
-                            <th>Spades ♠</th>
-                            <th>Clubs ♣</th>
-                            <th class="red-suit">Diamonds ♦</th>
-                            <th class="red-suit">Hearts ♥</th>
+                            <th>♠</th>
+                            <th>♣</th>
+                            <th class="red-suit">♦</th>
+                            <th class="red-suit">♥</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,7 +145,7 @@
         </div>
 
         <div class="mb-8">
-            <label class="text-lg text-gray-700">Select a Number (1-52):</label>
+            <label class="text-lg">Select a Number (1-52):</label>
             <!-- Container for number table, allowing horizontal scroll on small screens -->
             <div id="numberTableContainer" class="selection-table-container">
                 <table id="numberTable" class="selection-table">
@@ -148,7 +158,7 @@
 
         <button id="showResultBtn" class="px-6 py-3 rounded-lg">Show Selection</button>
 
-        <p id="result" class="mt-8 text-xl font-semibold text-blue-700"></p>
+        <p id="result" class="mt-8"></p>
     </div>
 
     <script>
@@ -204,6 +214,43 @@
             }
 
             /**
+             * Helper function to get a wrapped card value (1-52).
+             * Ensures values that go below 1 or above 52 wrap around correctly.
+             * @param {number} value - The raw card value.
+             * @returns {number} The wrapped card value (1-52).
+             */
+            function getWrappedCardValue(value) {
+                if (value > 52) {
+                    return value - 52;
+                } else if (value < 1) {
+                    return value + 52;
+                }
+                return value;
+            }
+
+            /**
+             * Converts a full card name (e.g., "King of Diamonds ♦") to its shorthand (e.g., "K♦").
+             * @param {string} fullCardName - The full name of the card.
+             * @returns {string} The shorthand representation of the card.
+             */
+            function getCardShorthand(fullCardName) {
+                // Split the string to extract rank and suit symbol
+                const parts = fullCardName.split(' ');
+                let rankPart = parts[0];
+                const suitSymbol = parts[parts.length - 1]; // Last part is the symbol
+
+                // Convert rank to shorthand
+                if (rankPart === 'Ace') rankPart = 'A';
+                else if (rankPart === 'Jack') rankPart = 'J';
+                else if (rankPart === 'Queen') rankPart = 'Q';
+                else if (rankPart === 'King') rankPart = 'K';
+                // '10' is already fine, others are single digits
+
+                return `${rankPart}${suitSymbol}`;
+            }
+
+
+            /**
              * Generates and populates the playing card selection table.
              * Each cell represents a card, with shorthand notation and full name stored in data attributes.
              */
@@ -219,7 +266,7 @@
 
                         const cell = row.insertCell(); // Create a new table cell
                         // Display shorthand: A♠, 10♣, K♦ etc.
-                        cell.textContent = `${rank.substring(0, 1)}${rank === '10' ? '0' : ''}${symbol}`;
+                        cell.textContent = getCardShorthand(cardName); // Use shorthand for display in table
                         cell.dataset.fullCardName = cardName; // Store the full card name in a data attribute
                         cell.classList.add('card-cell'); // Add a class for easy event delegation and styling
 
@@ -316,7 +363,27 @@
                         const magicCard = valueToCardMap[magicNumber];
 
                         if (magicCard) {
-                            resultParagraph.innerHTML = `You selected the card "${selectedCard}" value ${cardValue}, and the number "${selectedNumber}".<br>Your magic number is ${magicNumber} card "${magicCard}".`;
+                            // Generate the magic sequence
+                            const magicSequence = [];
+                            for (let i = -3; i <= 3; i++) {
+                                const seqValue = getWrappedCardValue(magicNumber + i);
+                                const seqCard = valueToCardMap[seqValue];
+                                let displayCard = seqCard ? getCardShorthand(seqCard) : `[${seqValue}]`;
+
+                                // Highlight the middle card (when i is 0)
+                                if (i === 0) {
+                                    displayCard = `<span class="highlight-card">${displayCard}</span>`;
+                                }
+                                magicSequence.push(displayCard);
+                            }
+
+                            // Use getCardShorthand for the selected card in the result text
+                            const displaySelectedCard = getCardShorthand(selectedCard);
+
+                            // Join the magic sequence with a pipe separator
+                            const magicSequenceDisplay = magicSequence.join(' | ');
+
+                            resultParagraph.innerHTML = `You selected the card "${displaySelectedCard}" value ${cardValue}, and the number "${selectedNumber}".<br>Your magic number is ${magicNumber} card "${getCardShorthand(magicCard)}".<br><br>Your magic sequence is: <br>${magicSequenceDisplay}`;
                         } else {
                             resultParagraph.textContent = `Error: Magic card not found for magic number ${magicNumber}.`;
                         }
