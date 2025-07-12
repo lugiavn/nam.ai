@@ -458,7 +458,7 @@
                             const displaySelectedCard = getCardShorthand(selectedCard);
 
                             // Join the magic sequence with a pipe separator for visual separation between items
-                            const magicSequenceDisplay = magicSequence.join(' | ');
+                            const magicSequenceDisplay = magicSequence.join(' <br> ');
 
                             resultParagraph.innerHTML = `You selected the card "${displaySelectedCard}" value ${cardValue}, and the number "${selectedNumber}".<br>Your magic number is ${magicNumber} card "${getCardShorthand(magicCard)}".<br><br>Your magic sequence is: <br>${magicSequenceDisplay}`;
                         } else {
